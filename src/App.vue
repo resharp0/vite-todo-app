@@ -24,17 +24,37 @@ import {
   NGrid,
   NH1,
   NButton,
+  NButtonGroup,
 } from "naive-ui";
-import {useRouter} from "vue-router"
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
+import { onMounted, onBeforeUnmount } from "vue";
 
 const router = useRouter();
+const store = useStore();
 
-const toMain = () =>{
-    router.push({path:"/"})
-}
-const toArchive = () =>{
-    router.push({path:"/archive"})
-}
+const toMain = () => {
+  router.push({ path: "/" });
+};
+const toArchive = () => {
+  router.push({ path: "/archive" });
+};
+
+onMounted(() => {
+  let myData = localStorage.getItem("myData");
+  if (myData) {
+    myData = JSON.parse(myData);
+    store.commit("updateTasks", myData[0]);
+    store.commit("updateUnfinishTasks", myData[1]);
+  }
+});
+
+window.onbeforeunload = (event) => {
+  let list = store.state.list;
+  let finished = store.state.finished;
+  let myData = [list, finished];
+  localStorage.setItem("myData", JSON.stringify(myData));
+};
 </script>
 
 

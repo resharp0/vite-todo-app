@@ -8,7 +8,7 @@
     <swiper
       :initial-slide="1"
       :slides-per-view="1"
-      :resistance-ratio="0.75"
+      :resistance-ratio="0"
       :speed="200"
       @activeIndexChange="onActiveIndexChange"
       @tap="onTap"
@@ -38,10 +38,14 @@ const onActiveIndexChange = (instance) => {
   const { activeIndex } = instance;
   if (activeIndex === 0) {
     emit("finish");
-    instance.destroy();
+    setTimeout(() => {
+      instance.destroy();
+    }, 1);
   } else if (activeIndex === 2) {
     emit("delete");
-    instance.destroy();
+    setTimeout(() => {
+      instance.destroy();
+    }, 1);
   }
 };
 
@@ -78,9 +82,8 @@ const onTap = (instance) => {
   & .finish-slide {
     color: white;
     background: #0099ff;
-    justify-content: flex-start;
-    text-align: right;
-    padding-left: 100px;
+    justify-content: flex-end;
+    box-sizing:border-box;
   }
 
   & .delete-slide {
@@ -88,6 +91,7 @@ const onTap = (instance) => {
     background: tomato;
     padding-left: 16px;
     justify-content: flex-start;
+    box-sizing:border-box;
   }
 }
 

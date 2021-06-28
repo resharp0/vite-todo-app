@@ -29,6 +29,9 @@ const store = Vuex.createStore({
             state.list.unshift(state.finished[idx])
             state.finished.splice(idx, 1);
         },
+        updateFinishedTask(state,data){
+            state.finished[data.idx] = data.task
+        },
         updateUnfinishTasks(state, tasks) {
             console.log(tasks);
             state.finished = tasks

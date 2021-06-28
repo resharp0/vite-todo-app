@@ -11,15 +11,38 @@
             >
                 <template #item="{ index, element }">
                     <finished-task-item
+                        :key="element.id"
                         :taskIndex="index"
                         :task="element"
                         @unfinish="() => onUnfinish(index)"
+                        @edit="() => onEdit(index,element)"
                     />
                 </template>
             </draggable>
         </n-list>
         <n-thing v-else> 还没有任务被完成 </n-thing>
     </n-space>
+
+    <n-modal
+        v-model:show="showEditModal"
+        preset="dialog"
+        title="Dialog"
+        :show-icon="false"
+    >
+        <template #header>
+            <div>任务详情</div>
+        </template>
+        <div>
+            <n-input
+                v-model:value="editContent"
+                type="input"
+                placeholder="请填写任务信息..."
+            />
+        </div>
+        <template #action>
+            <n-button  @click="onUpdate">提交</n-button>
+        </template>
+    </n-modal>
 </template>
 
 <script setup>
@@ -42,6 +65,10 @@ import { cloneDeep } from "lodash";
 const store = useStore();  
 const finished = computed(() => store.state.finished);
 
+let showEditModal = ref(false);
+let editContent = ref("");
+let editTaskIndex = ref(0);
+
 const dragList = (e) => {
     const { moved } = e;
     const { oldIndex, newIndex } = moved;
@@ -52,6 +79,29 @@ const dragList = (e) => {
 
 const onUnfinish = (index)  =>{
     store.commit("unFinishTask",index)
+};
+
+const onEdit = (index,task) => {
+    showEditModal.value = true;
+    editTaskIndex.value = index;
+    editContent.value = task.content
+}
+const initTask = {
+    id:"",
+    content: "",
+    status: "COMPLETE",
+};
+
+const onUpdate = () => {
+    let task = {
+            ...initTask,
+            content: editContent.value,
+    }
+    store.commit("updateFinishedTask",{
+        idx:editTaskIndex.value,
+        task:task
+    });
+    showEditModal.value = false;
 };
 
 </script>

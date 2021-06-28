@@ -11,6 +11,7 @@
             :resistance-ratio="0"
             :speed="200"
             @activeIndexChange="onActiveIndexChange"
+            @tap="onTap"
         >
             <swiper-slide class="unfinish-slide">取消完成</swiper-slide>
             <swiper-slide>{{ task.content }}</swiper-slide>
@@ -42,6 +43,10 @@ const onActiveIndexChange = (instance) => {
         instance.destroy();
     }
 };
+
+const onTap = () =>{
+    emit("edit")
+}
 
 
 </script>

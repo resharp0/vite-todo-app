@@ -4,7 +4,6 @@
     <n-list v-if="finished.length">
       <draggable
         :list="finished"
-        @change="dragList"
         @start="drag = true"
         @end="drag = false"
         item-key="id"
@@ -68,14 +67,6 @@ const finished = computed(() => store.state.finished);
 let showEditModal = ref(false);
 let editContent = ref("");
 let editTaskIndex = ref(0);
-
-const dragList = (e) => {
-  const { moved } = e;
-  const { oldIndex, newIndex } = moved;
-  const tasks = cloneDeep(finished);
-  tasks.splice(oldIndex, newIndex, tasks[oldIndex]);
-  store.commit("updateUnfinishTasks", tasks);
-};
 
 const onUnfinish = (index) => {
   store.commit("unFinishTask", index);

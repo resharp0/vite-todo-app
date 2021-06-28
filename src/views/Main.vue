@@ -3,7 +3,6 @@
     <n-list v-if="list.length">
       <draggable
         :list="list"
-        @change="dragList"
         @start="drag = true"
         @end="drag = false"
         item-key="id"
@@ -100,14 +99,6 @@ let content = ref(initTask.content);
 let showEditModal = ref(false);
 let editContent = ref("");
 let editTaskIndex = ref(0);
-
-const dragList = (e) => {
-  const { moved } = e;
-  const { oldIndex, newIndex } = moved;
-  const tasks = cloneDeep(list);
-  tasks.splice(oldIndex, newIndex, tasks[oldIndex]);
-  store.commit("updateTasks", tasks);
-};
 
 const onAdd = () => {
   store.commit("addTask", {

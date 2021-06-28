@@ -12,6 +12,7 @@
                     <task-item
                         :taskIndex="index"
                         :task="element"
+                        :key="element.id"
                         @delete="() => onDelete(index)"
                         @finish="() => onFinish(index)"
                         @edit="() => onEdit(index,element)"
@@ -63,12 +64,10 @@
                 placeholder="请填写任务信息..."
             />
         </div>
-
         <template #action>
             <n-button  @click="onUpdate">提交</n-button>
         </template>
     </n-modal>
-
 </template>
 
 <script setup>
@@ -88,6 +87,7 @@ import draggable from "vuedraggable";
 import { cloneDeep } from "lodash";
 
 const initTask = {
+    id:"",
     content: "",
     status: "INCOMPLETE",
 };
@@ -113,6 +113,7 @@ const onAdd = () => {
     store.commit("addTask", {
         ...initTask,
         content: content.value,
+        id:new Date(),
     });
     showModal.value = false;
     content.value = "";
@@ -129,13 +130,14 @@ const onEdit = (index,task) => {
 }
 
 const onUpdate = () => {
-    store.commit("updateTask", 
-        editTaskIndex.value,
-        {
+    let task = {
             ...initTask,
             content: editContent.value,
-        }
-    );
+    }
+    store.commit("updateTask",{
+        idx:editTaskIndex.value,
+        task:task
+    });
     showEditModal.value = false;
 };
 

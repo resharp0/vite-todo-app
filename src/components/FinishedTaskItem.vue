@@ -26,8 +26,8 @@
 import { defineProps, defineEmit,ref } from "vue";
 import "swiper/swiper.min.css";
 import { Swiper, SwiperSlide } from "swiper/vue";
-import { NListItem, NIcon,NInput,NButton,NModal } from "naive-ui";
 import { DragIndicatorOutlined } from "@vicons/material";
+import {NListItem,NIcon} from "naive-ui";
 
 const props = defineProps({
     task: Object,
@@ -40,7 +40,7 @@ const onReachBeginning = (instance) => {
     const { activeIndex } = instance;
     if (activeIndex === 1) {
         emit("unfinish");
-        // instance.destory();
+        instance.destroy();
     }
 };
 
@@ -48,7 +48,7 @@ const onReachEnd = (instance) => {
     const { activeIndex } = instance;
     if (activeIndex === 1) {
         emit("unfinish");
-        // instance.destory();
+        instance.destroy();
     }
 };
 

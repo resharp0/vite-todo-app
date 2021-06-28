@@ -12,36 +12,13 @@
             :speed="200"
             @reachBeginning="onReachBeginning"
             @reachEnd="onReachEnd"
-            @click="showModal = true"
+            @click="onClick"
         >
             <swiper-slide class="finish-slide">完成</swiper-slide>
             <swiper-slide>{{ task.content }}</swiper-slide>
             <swiper-slide class="delete-slide">删除</swiper-slide>
         </swiper>
     </n-list-item>
-
-    <n-modal
-        v-model:show="showModal"
-        preset="dialog"
-        title="Dialog"
-        :show-icon="false"
-    >
-        <template #header>
-            <div>任务详情</div>
-        </template>
-        <div>
-            <n-input
-                v-model:value="task.content"
-                type="input"
-                placeholder="请填写任务信息..."
-            />
-        </div>
-
-        <template #action>
-            <n-button  @click="">提交</n-button>
-        </template>
-    </n-modal>
-
 </template>
 
 <script setup>
@@ -49,22 +26,20 @@ import { defineProps, defineEmit,ref } from "vue";
 import "swiper/swiper.min.css";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import { DragIndicatorOutlined } from "@vicons/material";
+import {NListItem,NIcon} from "naive-ui";
 
 const props = defineProps({
-    task: Object,
     taskIndex: Number,
-    __proto__: Object,
+    task: Object,
 });
 
-const emit = defineEmit(["delete","finish"]);
-
-let showModal = ref(false)
+const emit = defineEmit(["delete","finish","edit"]);
 
 const onReachBeginning = (instance) => {
     const { activeIndex } = instance;
     if (activeIndex === 1) {
         emit("finish");
-        // instance.destory();
+        instance.destroy();
     }
 };
 
@@ -72,15 +47,14 @@ const onReachEnd = (instance) => {
     const { activeIndex } = instance;
     if (activeIndex === 1) {
         emit("delete");
-        // instance.destory();
+        instance.destroy();
     }
 };
 
 const onClick = (instance) => {
     const { activeIndex } = instance;
     if (activeIndex === 1) {
-        emit("tap");
-        // instance.destory();
+        emit("edit");
     }
 };
 
@@ -116,6 +90,7 @@ const onClick = (instance) => {
         background: #0099FF;
         justify-content: flex-start;
         text-align:right;
+        padding-left: 100px;
     }
 
     & .delete-slide {

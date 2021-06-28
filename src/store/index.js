@@ -11,8 +11,8 @@ const store = Vuex.createStore({
         addTask(state, task) {
             state.list.unshift(task)
         },
-        updateTask(state, idx, task) {
-            state.list[idx] = task
+        updateTask(state,data) {
+            state.list[data.idx] = data.task
         },
         updateTasks(state, tasks) {
             console.log(tasks);

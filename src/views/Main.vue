@@ -14,6 +14,7 @@
                         :task="element"
                         @delete="() => onDelete(index)"
                         @finish="() => onFinish(index)"
+                        @edit="() => onEdit(index,element)"
                     />
                 </template>
             </draggable>
@@ -45,6 +46,29 @@
             <n-button  @click="onAdd">添加</n-button>
         </template>
     </n-modal>
+
+    <n-modal
+        v-model:show="showEditModal"
+        preset="dialog"
+        title="Dialog"
+        :show-icon="false"
+    >
+        <template #header>
+            <div>任务详情</div>
+        </template>
+        <div>
+            <n-input
+                v-model:value="editContent"
+                type="input"
+                placeholder="请填写任务信息..."
+            />
+        </div>
+
+        <template #action>
+            <n-button  @click="onUpdate">提交</n-button>
+        </template>
+    </n-modal>
+
 </template>
 
 <script setup>
@@ -73,6 +97,9 @@ const list = computed(() => store.state.list);
 
 let showModal = ref(false);
 let content = ref(initTask.content);
+let showEditModal = ref(false);
+let editContent = ref("");
+let editTaskIndex = ref(0);
 
 const dragList = (e) => {
     const { moved } = e;
@@ -95,17 +122,21 @@ const onDelete = (index) => {
     store.commit("deleteTask", index);
 };
 
+const onEdit = (index,task) => {
+    showEditModal.value = true;
+    editTaskIndex.value = index;
+    editContent.value = task.content
+}
 
 const onUpdate = () => {
     store.commit("updateTask", 
-        taskIndex,
+        editTaskIndex.value,
         {
             ...initTask,
-            content: content.value,
+            content: editContent.value,
         }
     );
-    updateModal.value = false;
-    showModal.value = false;
+    showEditModal.value = false;
 };
 
 const onFinish = (index) => {

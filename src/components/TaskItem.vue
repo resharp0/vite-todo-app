@@ -48,7 +48,6 @@
 import { defineProps, defineEmit,ref } from "vue";
 import "swiper/swiper.min.css";
 import { Swiper, SwiperSlide } from "swiper/vue";
-import { NListItem, NIcon,NInput,NButton,NModal} from "naive-ui";
 import { DragIndicatorOutlined } from "@vicons/material";
 
 const props = defineProps({

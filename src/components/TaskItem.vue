@@ -12,7 +12,7 @@
             :speed="200"
             @reachBeginning="onReachBeginning"
             @reachEnd="onReachEnd"
-            @click="onClick"
+            @tap="onTap"
         >
             <swiper-slide class="finish-slide">完成</swiper-slide>
             <swiper-slide>{{ task.content }}</swiper-slide>
@@ -51,7 +51,7 @@ const onReachEnd = (instance) => {
     }
 };
 
-const onClick = (instance) => {
+const onTap = (instance) => {
     const { activeIndex } = instance;
     if (activeIndex === 1) {
         emit("edit");

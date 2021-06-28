@@ -10,8 +10,7 @@
             :slides-per-view="1"
             :resistance-ratio="0.75"
             :speed="200"
-            @reachBeginning="onReachBeginning"
-            @reachEnd="onReachEnd"
+            @activeIndexChange="onActiveIndexChange"
             @tap="onTap"
         >
             <swiper-slide class="finish-slide">完成</swiper-slide>
@@ -35,27 +34,19 @@ const props = defineProps({
 
 const emit = defineEmit(["delete","finish","edit"]);
 
-const onReachBeginning = (instance) => {
+const onActiveIndexChange = (instance) => {
     const { activeIndex } = instance;
-    if (activeIndex === 1) {
+    if (activeIndex === 0) {
         emit("finish");
         instance.destroy();
-    }
-};
-
-const onReachEnd = (instance) => {
-    const { activeIndex } = instance;
-    if (activeIndex === 1) {
+    }else if(activeIndex === 2) {
         emit("delete");
         instance.destroy();
     }
 };
 
 const onTap = (instance) => {
-    const { activeIndex } = instance;
-    if (activeIndex === 1) {
         emit("edit");
-    }
 };
 
 </script>

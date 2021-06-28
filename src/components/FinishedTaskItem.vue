@@ -10,8 +10,7 @@
             :slides-per-view="1"
             :resistance-ratio="0"
             :speed="200"
-            @reachBeginning="onReachBeginning"
-            @reachEnd="onReachEnd"
+            @activeIndexChange="onActiveIndexChange"
         >
             <swiper-slide class="unfinish-slide">取消完成</swiper-slide>
             <swiper-slide>{{ task.content }}</swiper-slide>
@@ -36,21 +35,14 @@ const props = defineProps({
 
 const emit = defineEmit(["unfinish"]);
 
-const onReachBeginning = (instance) => {
+const onActiveIndexChange = (instance) => {
     const { activeIndex } = instance;
-    if (activeIndex === 1) {
+    if (activeIndex === 0 || activeIndex === 2) {
         emit("unfinish");
         instance.destroy();
     }
 };
 
-const onReachEnd = (instance) => {
-    const { activeIndex } = instance;
-    if (activeIndex === 1) {
-        emit("unfinish");
-        instance.destroy();
-    }
-};
 
 </script>
 

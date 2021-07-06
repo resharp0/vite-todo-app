@@ -13,7 +13,7 @@
       @activeIndexChange="onActiveIndexChange"
       @tap="onTap"
     >
-      <swiper-slide class="finish-slide">完成</swiper-slide>
+      <swiper-slide class="complete-slide">完成</swiper-slide>
       <swiper-slide>{{ task.content }}</swiper-slide>
       <swiper-slide class="delete-slide">删除</swiper-slide>
     </swiper>

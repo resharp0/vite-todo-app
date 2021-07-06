@@ -43,17 +43,14 @@ const toArchive = () => {
 onMounted(() => {
   let myData = localStorage.getItem("myData");
   if (myData) {
-    myData = JSON.parse(myData);
-    store.commit("updateTasks", myData[0]);
-    store.commit("updateUnfinishTasks", myData[1]);
+    let list = JSON.parse(myData);
+    store.commit("updateTasks", list);
   }
 });
 
 window.onbeforeunload = (event) => {
   let list = store.state.list;
-  let finished = store.state.finished;
-  let myData = [list, finished];
-  localStorage.setItem("myData", JSON.stringify(myData));
+  localStorage.setItem("myData", JSON.stringify(list));
 };
 </script>
 

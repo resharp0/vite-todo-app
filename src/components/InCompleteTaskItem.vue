@@ -32,12 +32,12 @@ const props = defineProps({
   taskIndex: Number,
 });
 
-const emit = defineEmit(["unfinish"]);
+const emit = defineEmit(["InComplete"]);
 
 const onActiveIndexChange = (instance) => {
   const { activeIndex } = instance;
   if (activeIndex === 0 || activeIndex === 2) {
-    emit("unfinish");
+    emit("InComplete");
     setTimeout(() => {
       instance.destroy();
     }, 1);

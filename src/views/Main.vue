@@ -1,6 +1,6 @@
 <template>
   <n-space vertical>
-    <n-list v-if="list.length">
+    <n-list v-if="showList">
       <draggable
         :list="list"
         @start="drag = true"
@@ -9,11 +9,12 @@
       >
         <template #item="{ index, element }">
           <task-item
+            v-if="element.status == 'INCOMPLETE'"
             :taskIndex="index"
             :task="element"
             :key="element.id"
             @delete="() => onDelete(index)"
-            @finish="() => onFinish(index)"
+            @complete="() => onComplete(index)"
             @edit="() => onEdit(index, element)"
           />
         </template>
@@ -70,7 +71,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useStore } from "vuex";
 import {
   NList,
@@ -85,20 +86,30 @@ import TaskItem from "../components/TaskItem.vue";
 import draggable from "vuedraggable";
 import { cloneDeep } from "lodash";
 
+const store = useStore();
+const list = computed(() => store.state.list);
+
 const initTask = {
   id: "",
   content: "",
   status: "INCOMPLETE",
 };
 
-const store = useStore();
-const list = computed(() => store.state.list);
-
 let showModal = ref(false);
 let content = ref(initTask.content);
 let showEditModal = ref(false);
 let editContent = ref("");
 let editTaskIndex = ref(0);
+let editTask = { ...initTask };
+
+const showList = computed(() => {
+  for (let i = 0; i < store.state.list.length; i++) {
+    if (store.state.list[i].status === "INCOMPLETE") {
+      return true;
+    }
+  }
+  return false;
+});
 
 const onAdd = () => {
   store.commit("addTask", {
@@ -110,11 +121,16 @@ const onAdd = () => {
   content.value = "";
 };
 
+const onComplete = (index) => {
+  store.commit("completeTask", index);
+};
+
 const onDelete = (index) => {
   store.commit("deleteTask", index);
 };
 
 const onEdit = (index, task) => {
+  editTask = task;
   showEditModal.value = true;
   editTaskIndex.value = index;
   editContent.value = task.content;
@@ -122,7 +138,7 @@ const onEdit = (index, task) => {
 
 const onUpdate = () => {
   let task = {
-    ...initTask,
+    ...editTask,
     content: editContent.value,
   };
   store.commit("updateTask", {
@@ -132,9 +148,6 @@ const onUpdate = () => {
   showEditModal.value = false;
 };
 
-const onFinish = (index) => {
-  store.commit("finishTask", index);
-};
 </script>
 
 <style scoped>

@@ -21,20 +21,11 @@ const store = Vuex.createStore({
         deleteTask(state, idx) {
             state.list.splice(idx, 1);
         },
-        finishTask(state,idx){
-            state.finished.push(state.list[idx])
-            state.list.splice(idx, 1);
+        completeTask(state,idx){
+            state.list[idx].status = "COMPLETED"
         },
-        unFinishTask(state,idx){
-            state.list.unshift(state.finished[idx])
-            state.finished.splice(idx, 1);
-        },
-        updateFinishedTask(state,data){
-            state.finished[data.idx] = data.task
-        },
-        updateUnfinishTasks(state, tasks) {
-            console.log(tasks);
-            state.finished = tasks
+        inCompleteTask(state,idx){
+            state.list[idx].status = "INCOMPLETE"
         },
     }
 });

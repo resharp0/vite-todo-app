@@ -32,12 +32,12 @@ const props = defineProps({
   task: Object,
 });
 
-const emit = defineEmit(["delete", "finish", "edit"]);
+const emit = defineEmit(["delete", "complete", "edit"]);
 
 const onActiveIndexChange = (instance) => {
   const { activeIndex } = instance;
   if (activeIndex === 0) {
-    emit("finish");
+    emit("complete");
     setTimeout(() => {
       instance.destroy();
     }, 1);
@@ -79,7 +79,7 @@ const onTap = (instance) => {
     width: 100% !important;
   }
 
-  & .finish-slide {
+  & .complete-slide {
     color: white;
     background: #0099ff;
     justify-content: flex-end;

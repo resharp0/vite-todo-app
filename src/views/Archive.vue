@@ -1,19 +1,20 @@
 <template>
   <n-h1>Archive List</n-h1>
   <n-space vertical>
-    <n-list v-if="finished.length">
+    <n-list v-if="showList">
       <draggable
-        :list="finished"
+        :list="list"
         @start="drag = true"
         @end="drag = false"
         item-key="id"
       >
         <template #item="{ index, element }">
-          <finished-task-item
+          <inComplete-task-item
+            v-if="element.status == 'COMPLETED'"
             :key="element.id"
             :taskIndex="index"
             :task="element"
-            @unfinish="() => onUnfinish(index)"
+            @InComplete="() => onInComplete(index)"
             @edit="() => onEdit(index, element)"
           />
         </template>
@@ -57,38 +58,51 @@ import {
   NModal,
   NInput,
 } from "naive-ui";
-import FinishedTaskItem from "../components/FinishedTaskItem.vue";
+import InCompleteTaskItem from "../components/InCompleteTaskItem.vue";
 import draggable from "vuedraggable";
 import { cloneDeep } from "lodash";
 
 const store = useStore();
-const finished = computed(() => store.state.finished);
+const list = computed(() => store.state.list);
+
+const initTask = {
+  id: "",
+  content: "",
+  status: "COMPLETED",
+};
 
 let showEditModal = ref(false);
 let editContent = ref("");
 let editTaskIndex = ref(0);
+let editTask = {...initTask};
 
-const onUnfinish = (index) => {
-  store.commit("unFinishTask", index);
+const showList = computed(() => {
+  for (let i = 0; i < store.state.list.length; i++) {
+    if (store.state.list[i].status === "COMPLETED") {
+      return true;
+    }
+  }
+  return false;
+});
+
+const onInComplete = (index) => {
+  store.commit("inCompleteTask", index);
 };
 
 const onEdit = (index, task) => {
+  editTask = task
   showEditModal.value = true;
   editTaskIndex.value = index;
   editContent.value = task.content;
 };
-const initTask = {
-  id: "",
-  content: "",
-  status: "COMPLETE",
-};
+
 
 const onUpdate = () => {
   let task = {
-    ...initTask,
+    ...editTask,
     content: editContent.value,
   };
-  store.commit("updateFinishedTask", {
+  store.commit("updateTask", {
     idx: editTaskIndex.value,
     task: task,
   });

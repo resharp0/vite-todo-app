@@ -85,6 +85,7 @@ import {
 import TaskItem from "../components/TaskItem.vue";
 import draggable from "vuedraggable";
 import { cloneDeep } from "lodash";
+import { v4 as uuidv4 } from 'uuid';
 
 const store = useStore();
 const list = computed(() => store.state.list);
@@ -115,7 +116,7 @@ const onAdd = () => {
   store.commit("addTask", {
     ...initTask,
     content: content.value,
-    id: new Date(),
+    id: uuidv4(),
   });
   showModal.value = false;
   content.value = "";

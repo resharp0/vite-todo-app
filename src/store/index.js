@@ -4,7 +4,6 @@ const store = Vuex.createStore({
     state() {
         return {
             list: [],
-            finished:[],
         }
     },
     mutations: {

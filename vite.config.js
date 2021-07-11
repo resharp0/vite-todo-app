@@ -12,10 +12,21 @@ export default defineConfig({
     VitePWA({
       manifest: {
         // content of manifest
+        name: "todo-list",
+        short_name: "todo",
+        start_url: "/",
+        display: "standalone",
+        background_color: "#fff",
+        description: "A todo list App",
+        icons: [
+          {
+            src: "assets/icons/apple-icon-180.png",
+            sizes: "180x180",
+            type: "image/png",
+          },
+        ],
       },
-      workbox: {
-        // workbox options for generateSW
-      },
+      workbox: {},
     }),
   ],
 

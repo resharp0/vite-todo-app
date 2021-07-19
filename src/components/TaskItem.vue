@@ -10,12 +10,26 @@
       :slides-per-view="1"
       :resistance-ratio="0"
       :speed="200"
-      @activeIndexChange="onActiveIndexChange"
+      @transitionEnd="onTransitionEnd"
       @tap="onTap"
     >
-      <swiper-slide class="complete-slide">完成</swiper-slide>
+      <swiper-slide v-if="task.status === 'INCOMPLETE'" class="complete-slide"
+        >完成</swiper-slide
+      >
+      <swiper-slide
+        v-else-if="task.status === 'COMPLETED'"
+        class="left-incomplete-slide"
+        >取消完成</swiper-slide
+      >
       <swiper-slide>{{ task.content }}</swiper-slide>
-      <swiper-slide class="delete-slide">删除</swiper-slide>
+      <swiper-slide v-if="task.status === 'INCOMPLETE'" class="delete-slide"
+        >删除</swiper-slide
+      >
+      <swiper-slide
+        v-else-if="task.status === 'COMPLETED'"
+        class="right-incomplete-slide"
+        >取消完成</swiper-slide
+      >
     </swiper>
   </n-list-item>
 </template>
@@ -32,20 +46,26 @@ const props = defineProps({
   task: Object,
 });
 
-const emit = defineEmit(["delete", "complete", "edit"]);
+const emit = defineEmit(["delete", "complete", "edit", "InComplete"]);
 
-const onActiveIndexChange = (instance) => {
+const onTransitionEnd = (instance) => {
   const { activeIndex } = instance;
-  if (activeIndex === 0) {
-    emit("complete");
-    setTimeout(() => {
-      instance.destroy();
-    }, 1);
-  } else if (activeIndex === 2) {
-    emit("delete");
-    setTimeout(() => {
-      instance.destroy();
-    }, 1);
+  switch (props.task.status) {
+    case "INCOMPLETE":
+      if (activeIndex === 0) {
+        emit("complete");
+        instance.destroy();
+      } else if (activeIndex === 2) {
+        emit("delete");
+        instance.destroy();
+      }
+      break;
+    case "COMPLETED":
+      if (activeIndex === 0 || activeIndex === 2) {
+        emit("InComplete");
+        instance.destroy();
+      }
+      break;
   }
 };
 
@@ -83,15 +103,32 @@ const onTap = (instance) => {
     color: white;
     background: #0099ff;
     justify-content: flex-end;
-    box-sizing:border-box;
+    box-sizing: border-box;
+    padding-right: 8px;
   }
 
   & .delete-slide {
     color: white;
     background: tomato;
-    padding-left: 16px;
+    padding-left: 8px;
     justify-content: flex-start;
-    box-sizing:border-box;
+    box-sizing: border-box;
+  }
+
+  & .left-incomplete-slide {
+    color: white;
+    background: #00cc66;
+    justify-content: flex-end;
+    box-sizing: border-box;
+    padding-right: 8px;
+  }
+
+  & .right-incomplete-slide {
+    color: white;
+    background: #00cc66;
+    justify-content: flex-start;
+    box-sizing: border-box;
+    padding-left: 8px;
   }
 }
 

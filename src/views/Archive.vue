@@ -9,7 +9,7 @@
         item-key="id"
       >
         <template #item="{ index, element }">
-          <inComplete-task-item
+          <task-item
             v-if="element.status == 'COMPLETED'"
             :key="element.id"
             :taskIndex="index"
@@ -58,7 +58,7 @@ import {
   NModal,
   NInput,
 } from "naive-ui";
-import InCompleteTaskItem from "../components/InCompleteTaskItem.vue";
+import TaskItem from "../components/TaskItem.vue";
 import draggable from "vuedraggable";
 import { cloneDeep } from "lodash";
 
